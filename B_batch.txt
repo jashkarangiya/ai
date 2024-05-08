@@ -1,89 +1,61 @@
-SET 1
+SET1
 1......
-% Define parent-child relationships
-parent(john, mary).
-parent(john, alice).
-parent(alice, bob).
-parent(alice, carol).
-parent(bob, dave).
+% Define some basic vocabulary
+noun(she).
+noun(he).
+noun(john).
+noun(mary).
+noun(book).
+noun(pen).
+noun(room).
 
-% Define genetic similarity between individuals (simplified)
-genetic_similarity(john, mary, 0.8).
-genetic_similarity(john, alice, 0.7).
-genetic_similarity(alice, bob, 0.6).
-genetic_similarity(alice, carol, 0.5).
-genetic_similarity(bob, dave, 0.9).
+verb(loves).
+verb(hates).
+verb(writes).
+verb(reads).
 
-% Define predicate to infer parentage probabilistically
-infer_parentage(Child, PotentialParent, Probability) :-
-    parent(PotentialParent, Child),
-    genetic_similarity(PotentialParent, Child, Similarity),
-    Probability is Similarity.
+% Define sentence structures
+sentence(S) :-
+    noun_phrase(NP),
+    verb_phrase(VP),
+    append(NP, VP, S).
 
-% Query to infer potential parentage
-% Example query: infer_parentage(bob, PotentialParent, Probability).
+noun_phrase(NP) :-
+    noun(N),
+    append([N], [], NP).
 
-
-2...........
-
-
-SET 2
-1.......
-% Define predicates for familial relationships
-parent(pam, bob).
-parent(tom, bob).
-parent(tom, liz).
-parent(bob, ann).
-parent(bob, pat).
-parent(pat, jim).
-
-male(tom).
-male(bob).
-male(jim).
-
-female(pam).
-female(liz).
-female(ann).
-female(pat).
-
-% Define predicates for genetic markers and disease inheritance
-has_marker(bob, marker1).
-has_marker(liz, marker1).
-has_marker(pat, marker1).
-has_marker(jim, marker1).
-
-% Define disease inheritance probabilities
-% 1 = dominant, 2 = recessive
-disease_inheritance(marker1, 1).
-disease_inheritance(marker1, 2).
-
-% Predicate for disease transmission
-transmits_disease(Person, Disease) :-
-    has_marker(Person, Marker),
-    disease_inheritance(Marker, Inheritance),
-    (
-        Inheritance = 1, % If the disease is dominant
-        (
-            has_marker(Person, Disease) ; % Person has the disease marker
-            (parent(Parent, Person), transmits_disease(Parent, Disease)) % Or parent transmits the disease
-        )
-    ;
-        Inheritance = 2, % If the disease is recessive
-        (
-            has_marker(Person, Disease) ; % Person has the disease marker
-            (
-                parent(Parent1, Person),
-                parent(Parent2, Person),
-                transmits_disease(Parent1, Disease),
-                transmits_disease(Parent2, Disease)
-            ) % Both parents transmit the disease
-        )
-    ).
+verb_phrase(VP) :-
+    verb(V),
+    noun(N),
+    append([V, N], [], VP).
 
 % Example queries
-% Query: Does Jim have marker1?
-% ?- has_marker(jim, marker1).
-% Query: Does Pam transmit marker1 to Ann?
-% ?- transmits_disease(pam, marker1), parent(pam, ann).
-% Query: Who transmits marker1 to Jim?
-% ?- transmits_disease(Person, marker1), parent(Person, jim).
+% ?- sentence(X).
+% ?- noun_phrase(X).
+% ?- verb_phrase(X).
+
+SET-2
+1....
+% Knowledge base of rhyming words
+rhyme(cat, hat).
+rhyme(dog, frog).
+rhyme(mat, bat).
+rhyme(bird, word).
+
+% Generate a rhyming couplet
+generate_couplet(Couplet) :-
+    random_member(Word1, [cat, dog, mat, bird]),
+    rhyme(Word1, Word2),
+    format(atom(Line1), 'The ~w sat on the mat.', [Word1]),
+    format(atom(Line2), 'The ~w jumped over the ~w.', [Word2, Word1]),
+    Couplet = [Line1, Line2].
+
+% Command to generate a couplet
+generate_poem :-
+    generate_couplet(Couplet),
+    write(Couplet), nl,
+    generate_couplet(Couplet2),
+    write(Couplet2), nl.
+%to run: generate_poem.
+
+
