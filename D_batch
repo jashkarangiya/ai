@@ -129,15 +129,15 @@ optimize_schedule(TaskList, OptimalSchedule) :-
 
 2)
 
-import nltk
-from nltk.tokenize import word_tokenize
+% Define a predicate to tokenize a sentence
+tokenize_sentence(Sentence, Tokens) :-
+    atomic_list_concat(Tokens, ' ', Sentence).
 
-# Sample text
+% Sample text
 sample_text = "Prolog programming is fun and challenging."
 
-# Tokenize the sentence
-tokens = word_tokenize(sample_text)
+% Tokenize the sample text
+tokenize_sentence(sample_text, Tokens).
 
-# Print the tokens
-print("Tokens:", tokens)
-
+% Print the tokens
+writeln(Tokens).
