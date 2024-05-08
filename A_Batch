@@ -129,6 +129,40 @@ print("Locations:", locations)
 print("Organizations:", organizations)
 
 
+---------------------------------------------
+
+Alternative
+
+1) 
+import nltk
+nltk.download('averaged_perceptron_tagger')
+nltk.download('maxent_ne_chunker')
+nltk.download('words')
+# Sample text
+sample_text = '''SpaceX is an aerospace manufacturer and space transport services company headquartered in Hawthorne, California. It was founded by Elon Musk in 2002. The company designs, manufactures, and launches advanced rockets and spacecraft. Some of its notable achievements include the development of the Falcon 9 and Falcon Heavy rockets, as well as the Dragon spacecraft used for cargo resupply missions to the International Space Station.'''
+
+# Tokenize the text into sentences
+sentences = nltk.sent_tokenize(sample_text)
+
+# Apply NER to each sentence
+for sentence in sentences:
+    words = nltk.word_tokenize(sentence)
+    tagged_words = nltk.pos_tag(words)
+    entities = nltk.chunk.ne_chunk(tagged_words)
+    
+    # Print named entities and their categories
+    for entity in entities:
+        if isinstance(entity, nltk.tree.Tree):
+            if entity.label() == 'PERSON':
+                print(f"Person: {' '.join([leaf[0] for leaf in entity.leaves()])}")
+            elif entity.label() == 'GPE':
+                print(f"Location: {' '.join([leaf[0] for leaf in entity.leaves()])}")
+            elif entity.label() == 'ORGANIZATION':
+                print(f"Organization: {' '.join([leaf[0] for leaf in entity.leaves()])}")
+
+
+_____________________________________________________________________________________________________
+
 
 
 2)
