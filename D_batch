@@ -65,5 +65,79 @@ sum_of_membership([X|Xs], Sum) :-
     sum_of_membership(Xs, RestSum),
     Sum is X + RestSum.
 
+
+
+
+
+
+
+
+
+______________________________________________________________________________
+
+Set-2:
+
+1)
+
+% Define tasks and their durations
+task_duration(task1, 3).
+task_duration(task2, 2).
+task_duration(task3, 4).
+task_duration(task4, 1).
+
+% Define resources and their availability
+resource(avail_resource1, 5).
+resource(avail_resource2, 3).
+resource(avail_resource3, 4).
+
+% Define dependencies between tasks
+dependency(task2, task1).
+dependency(task3, task1).
+dependency(task4, task2).
+dependency(task4, task3).
+
+% Define predicate to schedule tasks
+schedule_tasks(TaskList, Schedule) :-
+    findall(Task, task_duration(Task, _), AllTasks),
+    schedule_tasks_helper(AllTasks, [], TaskList),
+    optimize_schedule(TaskList, Schedule).
+
+% Helper predicate to generate task schedule
+schedule_tasks_helper([], Acc, Acc).
+schedule_tasks_helper([Task|Rest], Acc, TaskList) :-
+    findall(DepTask, (dependency(Task, DepTask), member(DepTask, Acc)), DepTasks),
+    schedule_tasks_helper(Rest, [Task|Acc], TaskList),
+    append(DepTasks, Acc, NewAcc),
+    schedule_tasks_helper(Rest, NewAcc, TaskList).
+
+% Predicate to optimize the schedule
+optimize_schedule(TaskList, OptimalSchedule) :-
+    % Define optimization criteria here (e.g., minimize total duration)
+    % Example: OptimalSchedule = TaskList.
+    OptimalSchedule = TaskList. % For now, just return the same schedule
+
+% Example usage:
+% schedule_tasks([], Schedule).
+
+
 % Example usage:
 % defuzzify(CrispControl).
+
+
+
+.................................................
+
+2)
+
+import nltk
+from nltk.tokenize import word_tokenize
+
+# Sample text
+sample_text = "Prolog programming is fun and challenging."
+
+# Tokenize the sentence
+tokens = word_tokenize(sample_text)
+
+# Print the tokens
+print("Tokens:", tokens)
+
