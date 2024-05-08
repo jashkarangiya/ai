@@ -1,0 +1,64 @@
+1st set:
+1:
+
+% Define the activities for different weather conditions
+activities(sunny, [hiking, picnicking, cycling, gardening]).
+activities(rainy, [reading, indoor games, cooking, movie-watching]).
+activities(cloudy, [walking, photography, birdwatching, visiting museum]).
+activities(snowy, [skiing, snowboarding, building a snowman, drinking hot cocoa]).
+
+% Define the rules for recommending activities based on the weather
+recommend_activity(Weather) :-
+    activities(Weather, Activities),
+    write('Recommended activities for '), write(Weather), write(':'), nl,
+    write_activities(Activities).
+
+% Helper predicate to print the list of activities
+write_activities([]).
+write_activities([Activity|Rest]) :-
+    write('- '), write(Activity), nl,
+    write_activities(Rest).
+
+% Example query: recommend activities for a specific weather condition
+% To use this, simply query recommend_activity with the weather condition
+% For example: recommend_activity(sunny).
+
+2:
+% Define prerequisite rules
+prerequisite(cs101, []).
+prerequisite(cs102, [cs101]).
+prerequisite(cs201, [cs101, cs102]).
+prerequisite(cs202, [cs101, cs102]).
+prerequisite(cs301, [cs201, cs202]).
+
+% Define dynamic predicates for student registration
+:- dynamic enrolled/2.
+
+% Register a student for a course
+register(Student, Course) :-
+    \+ enrolled(Student, Course),
+    can_register(Student, Course),
+    assert(enrolled(Student, Course)),
+    format('Student ~w has registered for course ~w.~n', [Student, Course]).
+
+% Drop a course for a student
+drop(Student, Course) :-
+    retract(enrolled(Student, Course)),
+    format('Student ~w has dropped course ~w.~n', [Student, Course]).
+
+% Check if a student can register for a course
+can_register(Student, Course) :-
+    prerequisite(Course, Prerequisites),
+    forall(member(Prereq, Prerequisites), enrolled(Student, Prereq)).
+
+% Query current course enrolment for a student
+current_enrolment(Student) :-
+    findall(Course, enrolled(Student, Course), EnrolledCourses),
+    format('Student ~w is currently enrolled in: ~w~n', [Student, EnrolledCourses]).
+
+% Example usage:
+% register(john, cs101).
+% register(john, cs102).
+% drop(john, cs102).
+% register(john, cs201).
+% current_enrolment(john).
