@@ -62,3 +62,85 @@ current_enrolment(Student) :-
 % drop(john, cs102).
 % register(john, cs201).
 % current_enrolment(john).
+
+
+
+
+
+
+
+
+
+## Set- 2:>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+1)
+import nltk
+from nltk import ne_chunk
+from nltk.tokenize import word_tokenize
+from nltk.tag import pos_tag
+
+# Sample text
+sample_text = """
+SpaceX is an aerospace manufacturer and space transport services company headquartered in Hawthorne, California. 
+It was founded by Elon Musk in 2002. 
+The company designs, manufactures, and launches advanced rockets and spacecraft. 
+Some of its notable achievements include the development of the Falcon 9 and Falcon Heavy rockets, 
+as well as the Dragon spacecraft used for cargo resupply missions to the International Space Station.
+"""
+
+# Tokenize the text into words
+words = word_tokenize(sample_text)
+
+# Perform part-of-speech tagging
+tagged_words = pos_tag(words)
+
+# Perform named entity recognition
+named_entities = ne_chunk(tagged_words)
+
+# Function to extract named entities from the named entity tree
+def extract_entities(tree):
+    entities = []
+    if hasattr(tree, 'label') and tree.label():
+        if tree.label() == 'NE':
+            entities.append(' '.join([child[0] for child in tree]))
+        else:
+            for child in tree:
+                entities.extend(extract_entities(child))
+    return entities
+
+# Extract named entities
+named_entities_list = extract_entities(named_entities)
+
+# Classify named entities into categories
+person_names = []
+locations = []
+organizations = []
+
+for entity in named_entities_list:
+    if 'PERSON' in nltk.pos_tag([entity])[0][1]:
+        person_names.append(entity)
+    elif 'GPE' in nltk.pos_tag([entity])[0][1]:  # GPE: geopolitical entity
+        locations.append(entity)
+    elif 'ORGANIZATION' in nltk.pos_tag([entity])[0][1]:
+        organizations.append(entity)
+
+# Print the classified named entities
+print("Person Names:", person_names)
+print("Locations:", locations)
+print("Organizations:", organizations)
+
+
+
+
+2)
+
+import nltk
+from nltk.tokenize import word_tokenize
+
+# Sample text
+sample_text = "Natural language processing (NLP) is a subfield of artificial intelligence (AI) that focuses on the interaction between computers and humans through natural language."
+
+# Tokenize the sentence
+tokens = word_tokenize(sample_text)
+
+# Print the tokens
+print("Tokens:", tokens)
