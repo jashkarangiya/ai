@@ -1,0 +1,1 @@
+This code reads the input text from a file called PT.TXT, processes it into pairs of two letters, generates a random key of length 6 to 8 letters
