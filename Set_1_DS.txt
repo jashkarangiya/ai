@@ -1,0 +1,85 @@
+Set_1
+
+
+1)
+
+CREATE TABLE customer1 (
+  Customer_ID INT,
+  Name VARCHAR(255),
+  Address VARCHAR(255),
+  Email VARCHAR(255),
+  Phone VARCHAR(255),
+  MembershipStatus VARCHAR(255),
+  LastPurchaseDate DATE
+);
+
+INSERT INTO customer1 (Customer_ID, Name, Address, Email, Phone, MembershipStatus, LastPurchaseDate)
+VALUES (1, 'John Smith', '123 Main St', 'john@example.co', '555-123-4567', 'Gold', '2024-04-25');
+
+INSERT INTO customer1 (Customer_ID, Name, Address, Email, Phone, MembershipStatus, LastPurchaseDate)
+VALUES (2, 'Alice Brown', '456 Elm St', 'alice@example.co', '555-987-6543', 'Silver', '2024-04-23');
+
+INSERT INTO customer1 (Customer_ID, Name, Address, Email, Phone, MembershipStatus, LastPurchaseDate)
+VALUES (3, 'Bob Johnson', '789 Oak St', 'bob@example.com', '555-234-5678', 'Bronze', '2024-04-20');
+
+INSERT INTO customer1 (Customer_ID, Name, Address, Email, Phone, MembershipStatus, LastPurchaseDate)
+VALUES (4, 'Emily Davis', '101 Pine St', 'emily@example.co', '785-555-8765', 'Silver', '2024-04-19');
+
+INSERT INTO customer1 (Customer_ID, Name, Address, Email, Phone, MembershipStatus, LastPurchaseDate)
+VALUES (5, 'Sarah Lee', '202 Cedar St', 'sarah@example.co', '555-345-6789', 'Gold', '2024-04-24');
+
+___________________
+
+2) 
+SELECT MembershipStatus
+FROM customer1
+WHERE Phone = '555-987-6543' AND LastPurchaseDate = '2024-04-23';
+
+
+_____________________
+
+3)
+
+CREATE TABLE CustomerInfo (
+  Customer_ID INT PRIMARY KEY,
+  Name VARCHAR(255),
+  Address VARCHAR(255),
+  Email VARCHAR(255),
+  Phone VARCHAR(255)
+);
+
+CREATE TABLE CustomerTransactionHistory (
+  Customer_ID INT PRIMARY KEY,
+  MembershipStatus VARCHAR(255),
+  LastPurchaseDate DATE,
+  FOREIGN KEY (Customer_ID) REFERENCES CustomerInfo(Customer_ID)
+);
+
+
+SELECT MembershipStatus, LastPurchaseDate
+FROM CustomerTransactionHistory;
+
+
+SELECT MembershipStatus, LastPurchaseDate
+FROM CustomerTransactionHistory
+WHERE Customer_ID = [Customer ID];
+
+
+___________________________
+
+4)
+SELECT ci.Name, cth.LastPurchaseDate
+FROM CustomerInfo ci
+INNER JOIN CustomerTransactionHistory cth ON ci.Customer_ID = cth.Customer_ID
+WHERE ci.Address = '202 Cedar St' AND cth.LastPurchaseDate = '2024-04-24';
+
+____________________
+
+5)
+
+CREATE VIEW SilverMemberDetails AS
+SELECT ci.*, cth.*
+FROM CustomerInfo ci
+INNER JOIN CustomerTransactionHistory cth ON ci.Customer_ID = cth.Customer_ID
+WHERE cth.MembershipStatus = 'Silver';
+
