@@ -1,85 +1,68 @@
-Set_1
-
+Set_1:
 
 1)
-
-CREATE TABLE customer1 (
-  Customer_ID INT,
-  Name VARCHAR(255),
-  Address VARCHAR(255),
-  Email VARCHAR(255),
-  Phone VARCHAR(255),
-  MembershipStatus VARCHAR(255),
-  LastPurchaseDate DATE
+CREATE TABLE books (
+  Book_ID INT PRIMARY KEY,
+  Title VARCHAR(255),
+  Author VARCHAR(255),
+  Category VARCHAR(255),
+  Price DECIMAL(10,2),
+  ISBN VARCHAR(255)
 );
 
-INSERT INTO customer1 (Customer_ID, Name, Address, Email, Phone, MembershipStatus, LastPurchaseDate)
-VALUES (1, 'John Smith', '123 Main St', 'john@example.co', '555-123-4567', 'Gold', '2024-04-25');
+INSERT INTO books (Book_ID, Title, Author, Category, Price, ISBN)
+VALUES (1, 'The Lord of the Rings', 'J. R. R. Tolkien', 'Fantasy', 24.99, '9780261102694');
 
-INSERT INTO customer1 (Customer_ID, Name, Address, Email, Phone, MembershipStatus, LastPurchaseDate)
-VALUES (2, 'Alice Brown', '456 Elm St', 'alice@example.co', '555-987-6543', 'Silver', '2024-04-23');
+INSERT INTO books (Book_ID, Title, Author, Category, Price, ISBN)
+VALUES (2, 'The Hitchhiker\'s Guide to the Galaxy', 'Douglas Adams', 'Science Fiction', 14.99, '9780345391803');
 
-INSERT INTO customer1 (Customer_ID, Name, Address, Email, Phone, MembershipStatus, LastPurchaseDate)
-VALUES (3, 'Bob Johnson', '789 Oak St', 'bob@example.com', '555-234-5678', 'Bronze', '2024-04-20');
+INSERT INTO books (Book_ID, Title, Author, Category, Price, ISBN)
+VALUES (3, 'Pride and Prejudice', 'Jane Austen', 'Romance', 12.99, '9780140439516');
 
-INSERT INTO customer1 (Customer_ID, Name, Address, Email, Phone, MembershipStatus, LastPurchaseDate)
-VALUES (4, 'Emily Davis', '101 Pine St', 'emily@example.co', '785-555-8765', 'Silver', '2024-04-19');
+INSERT INTO books (Book_ID, Title, Author, Category, Price, ISBN)
+VALUES (4, 'To Kill a Mockingbird', 'Harper Lee', 'Fiction', 19.99, '9780425173410');
 
-INSERT INTO customer1 (Customer_ID, Name, Address, Email, Phone, MembershipStatus, LastPurchaseDate)
-VALUES (5, 'Sarah Lee', '202 Cedar St', 'sarah@example.co', '555-345-6789', 'Gold', '2024-04-24');
-
-___________________
-
-2) 
-SELECT MembershipStatus
-FROM customer1
-WHERE Phone = '555-987-6543' AND LastPurchaseDate = '2024-04-23';
+INSERT INTO books (Book_ID, Title, Author, Category, Price, ISBN)
+VALUES (5, 'The Great Gatsby', 'F. Scott Fitzgerald', 'Fiction', 16.99, '9780747531185');
 
 
-_____________________
+________________________
 
-3)
+2)
 
-CREATE TABLE CustomerInfo (
-  Customer_ID INT PRIMARY KEY,
-  Name VARCHAR(255),
-  Address VARCHAR(255),
-  Email VARCHAR(255),
-  Phone VARCHAR(255)
-);
-
-CREATE TABLE CustomerTransactionHistory (
-  Customer_ID INT PRIMARY KEY,
-  MembershipStatus VARCHAR(255),
-  LastPurchaseDate DATE,
-  FOREIGN KEY (Customer_ID) REFERENCES CustomerInfo(Customer_ID)
+SELECT Address, Email
+FROM students
+WHERE CGPA = (
+  SELECT MAX(CGPA)
+  FROM students
 );
 
 
-SELECT MembershipStatus, LastPurchaseDate
-FROM CustomerTransactionHistory;
+CREATE VIEW ComputerScienceStudents AS
+SELECT *
+FROM students
+WHERE Program = 'Computer Science';
 
 
-SELECT MembershipStatus, LastPurchaseDate
-FROM CustomerTransactionHistory
-WHERE Customer_ID = [Customer ID];
+CREATE VIEW ComputerEngineeringStudents AS
+SELECT *
+FROM students
+WHERE Program = 'Computer Engineering';
 
 
-___________________________
+SELECT Name, Address
+FROM ComputerScienceStudents;
 
-4)
-SELECT ci.Name, cth.LastPurchaseDate
-FROM CustomerInfo ci
-INNER JOIN CustomerTransactionHistory cth ON ci.Customer_ID = cth.Customer_ID
-WHERE ci.Address = '202 Cedar St' AND cth.LastPurchaseDate = '2024-04-24';
 
-____________________
 
-5)
+SELECT Name, Address
+FROM ComputerEngineeringStudents;
 
-CREATE VIEW SilverMemberDetails AS
-SELECT ci.*, cth.*
-FROM CustomerInfo ci
-INNER JOIN CustomerTransactionHistory cth ON ci.Customer_ID = cth.Customer_ID
-WHERE cth.MembershipStatus = 'Silver';
+
+
+CREATE VIEW StudentProgramDetails AS
+SELECT s.Name, s.Address, s.Email, p.ProgramName
+FROM students s
+INNER JOIN programs p ON s.Program = p.ProgramID;
+
 

@@ -1,69 +1,64 @@
 Set_2
 
 1)
-CREATE TABLE products (
-  ProductID INT PRIMARY KEY,
-  Name VARCHAR(255),
-  Description VARCHAR(255),
-  Price DECIMAL(10,2),
-  Category VARCHAR(255),
-  QuantityAvailable INT,
-  SupplierID INT
+CREATE TABLE orders (
+  OrderID INT PRIMARY KEY,
+  CustomerID INT,
+  OrderDate DATE,
+  OrderStatus VARCHAR(255),
+  OrderTotal DECIMAL(10,2),
+  FOREIGN KEY (CustomerID) REFERENCES customers(CustomerID)
 );
 
-INSERT INTO products (ProductID, Name, Description, Price, Category, QuantityAvailable, SupplierID)
-VALUES (1, 'Laptop', 'SSD storage', 999.00, 'Electronics', 20, 101);
+INSERT INTO orders (OrderID, CustomerID, OrderDate, OrderStatus, OrderTotal)
+VALUES (1, 101, '2024-04-20', 'Processing', 199.00);
 
-INSERT INTO products (ProductID, Name, Description, Price, Category, QuantityAvailable, SupplierID)
-VALUES (2, 'Smartphone', 'Dual-camera', 499.00, 'Electronics', 50, 102);
+INSERT INTO orders (OrderID, CustomerID, OrderDate, OrderStatus, OrderTotal)
+VALUES (2, 102, '2024-04-21', 'Completed', 499.00);
 
-INSERT INTO products (ProductID, Name, Description, Price, Category, QuantityAvailable, SupplierID)
-VALUES (3, 'Headphone', 'Wireless', 149.00, 'Electronics', 30, 103);
+INSERT INTO orders (OrderID, CustomerID, OrderDate, OrderStatus, OrderTotal)
+VALUES (3, 103, '2024-04-22', 'Cancelled', 149.00);
 
-INSERT INTO products (ProductID, Name, Description, Price, Category, QuantityAvailable, SupplierID)
-VALUES (4, 'Backpack', 'Waterproof', 49.00, 'Fashion', 100, 104);
+INSERT INTO orders (OrderID, CustomerID, OrderDate, OrderStatus, OrderTotal)
+VALUES (4, 101, '2024-04-23', 'Completed', 999.00);
 
-INSERT INTO products (ProductID, Name, Description, Price, Category, QuantityAvailable, SupplierID)
-VALUES (5, 'Watch', 'Analog', 199.00, 'Fashion', 50, 105);
+INSERT INTO orders (OrderID, CustomerID, OrderDate, OrderStatus, OrderTotal)
+VALUES (5, 102, '2024-04-24', 'On Hold', 349.00);
 
-__________________________
+
+_______________________________
 
 2)
-
 SELECT SUM(QuantityAvailable)
 FROM products
-WHERE Category = 'Fashion' AND Name = 'Backpack';
+WHERE Category = 'Electronics' AND Name = 'Laptop';
 
 
-____________________________
-
-3)
-CREATE VIEW ElectronicsProducts AS
-SELECT *
-FROM products
-WHERE Category = 'Electronics';
+CREATE VIEW ProductDetails AS
+SELECT Name, Description, Price, Category
+FROM products;
 
 
-CREATE VIEW FashionProducts AS
-SELECT *
-FROM products
-WHERE Category = 'Fashion';
+CREATE VIEW InventoryDetails AS
+SELECT QuantityAvailable, SupplierID
+FROM products;
 
 
-________________________________________
-
-4)
-
-SELECT Description
-FROM ElectronicsProducts
-WHERE Name = 'Headphone';
+SELECT Price
+FROM ProductDetails
+WHERE Name = 'Smartphone';
 
 
-SELECT Description
-FROM FashionProducts
-WHERE Name = 'Backpack';
+SELECT QuantityAvailable
+FROM InventoryDetails
+WHERE (SELECT ProductID FROM products WHERE Name = 'Smartphone') = products.ProductID;
 
 
-__________________________
-
-5)
+CREATE VIEW ElectronicsInformation AS
+SELECT pd.*, id.*
+FROM ProductDetails pd
+INNER JOIN InventoryDetails id ON pd.Name = (
+  SELECT Name
+  FROM products
+  WHERE Category = 'Electronics'
+);
