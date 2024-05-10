@@ -1,0 +1,69 @@
+Set_2
+
+1)
+CREATE TABLE products (
+  ProductID INT PRIMARY KEY,
+  Name VARCHAR(255),
+  Description VARCHAR(255),
+  Price DECIMAL(10,2),
+  Category VARCHAR(255),
+  QuantityAvailable INT,
+  SupplierID INT
+);
+
+INSERT INTO products (ProductID, Name, Description, Price, Category, QuantityAvailable, SupplierID)
+VALUES (1, 'Laptop', 'SSD storage', 999.00, 'Electronics', 20, 101);
+
+INSERT INTO products (ProductID, Name, Description, Price, Category, QuantityAvailable, SupplierID)
+VALUES (2, 'Smartphone', 'Dual-camera', 499.00, 'Electronics', 50, 102);
+
+INSERT INTO products (ProductID, Name, Description, Price, Category, QuantityAvailable, SupplierID)
+VALUES (3, 'Headphone', 'Wireless', 149.00, 'Electronics', 30, 103);
+
+INSERT INTO products (ProductID, Name, Description, Price, Category, QuantityAvailable, SupplierID)
+VALUES (4, 'Backpack', 'Waterproof', 49.00, 'Fashion', 100, 104);
+
+INSERT INTO products (ProductID, Name, Description, Price, Category, QuantityAvailable, SupplierID)
+VALUES (5, 'Watch', 'Analog', 199.00, 'Fashion', 50, 105);
+
+__________________________
+
+2)
+
+SELECT SUM(QuantityAvailable)
+FROM products
+WHERE Category = 'Fashion' AND Name = 'Backpack';
+
+
+____________________________
+
+3)
+CREATE VIEW ElectronicsProducts AS
+SELECT *
+FROM products
+WHERE Category = 'Electronics';
+
+
+CREATE VIEW FashionProducts AS
+SELECT *
+FROM products
+WHERE Category = 'Fashion';
+
+
+________________________________________
+
+4)
+
+SELECT Description
+FROM ElectronicsProducts
+WHERE Name = 'Headphone';
+
+
+SELECT Description
+FROM FashionProducts
+WHERE Name = 'Backpack';
+
+
+__________________________
+
+5)
